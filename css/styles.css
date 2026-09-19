@@ -389,6 +389,33 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
 .ref-note { color: var(--ink-soft); font-size: 0.9rem; }
 
+/* ---------- Ranking credential ----------
+   Stated as an original text/type treatment in the site's own navy+gold
+   system (not a reproduction of the school's marketing graphic). */
+.ranking-card {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(160deg, var(--navy-950), var(--navy-800));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 26px 30px;
+  box-shadow: var(--shadow);
+}
+.ranking-number {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  font-weight: 600;
+  color: var(--gold-400);
+  margin: 0;
+  line-height: 1;
+}
+.ranking-number sup { font-size: 1.1rem; top: -1.4em; }
+.ranking-text-group { display: flex; flex-direction: column; gap: 4px; }
+.ranking-text { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin: 0; }
+.ranking-source { font-size: 0.85rem; color: rgba(255, 255, 255, 0.65); margin: 0; }
+
 /* ---------- Skills / Languages ---------- */
 .tag-list { display: flex; flex-wrap: wrap; gap: 10px; }
 .tag-list li {
@@ -557,6 +584,9 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   .carousel-arrow-prev { left: 10px; }
   .carousel-arrow-next { right: 10px; }
   .carousel-caption { font-size: 0.85rem; padding: 14px 16px; }
+
+  .ranking-card { flex-direction: column; align-items: flex-start; text-align: left; gap: 10px; padding: 22px 24px; }
+  .ranking-number { font-size: 2.6rem; }
 }
 
 @media (max-width: 400px) {
