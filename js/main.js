@@ -31,34 +31,59 @@
   // scroll down, zoom back out if you scroll back up) instead of firing
   // once like a classic "reveal on scroll" effect.
   var prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var heroPin = document.querySelector(".hero-pin");
   var heroSection = document.querySelector(".hero");
   var heroBg = document.querySelector(".hero-bg");
-  var heroPhoto = document.querySelector(".hero-photo img");
+  var heroText = document.querySelector(".hero-text");
+  var heroPhotoWrap = document.querySelector(".hero-photo");
+  var heroPhotoImg = document.querySelector(".hero-photo img");
+  var siteHeader = document.querySelector(".site-header");
   var revealEls = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   }
 
-  if (!prefersReducedMotion && "requestAnimationFrame" in window && (heroSection || revealEls.length)) {
+  if (!prefersReducedMotion && "requestAnimationFrame" in window && (heroPin || revealEls.length)) {
     var ticking = false;
 
     var update = function () {
       ticking = false;
       var vh = window.innerHeight;
 
-      // Hero: the landscape (and photo) zoom in continuously as the
-      // page scrolls from the top down through the hero, "arriving"
-      // fully zoomed in right around the point the About section
-      // reaches the top of the viewport.
-      if (heroSection) {
-        var heroRect = heroSection.getBoundingClientRect();
-        var heroProgress = clamp(-heroRect.top / heroRect.height, 0, 1);
+      // Hero: a pinned scroll track (see .hero-pin in css/styles.css).
+      // At the very top, only the landscape is visible; as the pinned
+      // section is scrolled through, the name/photo rise in and the
+      // landscape keeps growing toward a full, larger view — all tied
+      // directly to scroll position rather than time, so the pace
+      // matches however fast or slow the person scrolls.
+      if (heroPin && heroSection) {
+        var headerH = siteHeader ? siteHeader.offsetHeight : 0;
+        var pinRect = heroPin.getBoundingClientRect();
+        var scrollable = pinRect.height - heroSection.offsetHeight;
+        var heroProgress = scrollable > 4
+          ? clamp((headerH - pinRect.top) / scrollable, 0, 1)
+          : 1; // no real pin range (e.g. mobile fallback) — show fully revealed
+
+        // Landscape grows for the full length of the pin, reaching its
+        // largest right as the hero lets go of the scroll.
         if (heroBg) {
-          heroBg.style.transform = "scale(" + (1 + heroProgress * 0.55) + ")";
+          heroBg.style.transform = "scale(" + (1 + heroProgress * 0.6) + ")";
         }
-        if (heroPhoto) {
-          heroPhoto.style.transform = "scale(" + (1 + heroProgress * 0.18) + ")";
+
+        // Name + photo rise in over the first ~55% of the pin, then hold.
+        var revealProgress = clamp(heroProgress / 0.55, 0, 1);
+        var eased = revealProgress * revealProgress * (3 - 2 * revealProgress); // smoothstep
+        if (heroText) {
+          heroText.style.opacity = String(eased);
+          heroText.style.transform = "translateY(" + (26 * (1 - eased)) + "px) scale(" + (0.94 + eased * 0.06) + ")";
+        }
+        if (heroPhotoWrap) {
+          heroPhotoWrap.style.opacity = String(eased);
+          heroPhotoWrap.style.transform = "translateY(" + (26 * (1 - eased)) + "px) scale(" + (0.94 + eased * 0.06) + ")";
+        }
+        if (heroPhotoImg) {
+          heroPhotoImg.style.transform = "scale(" + (1 + heroProgress * 0.12) + ")";
         }
       }
 
@@ -86,6 +111,8 @@
     update();
   } else {
     // Reduced motion, or no rAF support: show everything at rest, no motion.
+    if (heroText) { heroText.style.opacity = "1"; heroText.style.transform = "none"; }
+    if (heroPhotoWrap) { heroPhotoWrap.style.opacity = "1"; heroPhotoWrap.style.transform = "none"; }
     revealEls.forEach(function (el) {
       el.style.opacity = "1";
       el.style.transform = "none";

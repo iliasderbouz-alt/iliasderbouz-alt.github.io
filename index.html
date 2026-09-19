@@ -10,6 +10,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<noscript>
+<style>
+  .hero-pin { height: auto !important; }
+  .hero { position: relative !important; top: 0 !important; height: auto !important; padding: 88px 0 !important; }
+  .hero-text, .hero-photo { opacity: 1 !important; transform: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+</style>
+</noscript>
 </head>
 <body>
 
@@ -34,41 +42,43 @@
 
 <main id="main">
 
-  <section class="hero">
-    <svg class="hero-bg" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="skyGlowC" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0e2340" stop-opacity="0"/>
-          <stop offset="65%" stop-color="#c9a227" stop-opacity="0.16"/>
-          <stop offset="100%" stop-color="#d9b94f" stop-opacity="0.28"/>
-        </linearGradient>
-      </defs>
-      <rect width="1440" height="600" fill="url(#skyGlowC)"/>
-      <polygon points="0,600 0,440 160,320 260,400 380,260 520,420 640,340 780,460 900,300 1040,430 1180,350 1320,440 1440,380 1440,600" fill="#14335c"/>
-      <polygon points="140,340 260,400 205,415" fill="#3a5d8a"/>
-      <polygon points="380,260 520,420 450,430" fill="#3a5d8a"/>
-      <polygon points="900,300 1040,430 960,440" fill="#3a5d8a"/>
-      <polygon points="0,600 0,500 150,420 300,480 460,400 620,470 800,410 980,480 1150,420 1300,470 1440,440 1440,600" fill="#0a1a30"/>
-    </svg>
-    <div class="wrap hero-inner">
-      <div class="hero-text">
-        <p class="eyebrow">Hospitality Management Alumni</p>
-        <h1>Ilias Derbouz</h1>
-        <p class="hero-lede">Hospitality is where I come alive — every guest, every shift, every new culture teaches me something. I've traded borders for front desks across Switzerland, Iceland, Italy and Sweden, and I'm just getting started: building toward a career leading teams and creating the kind of hospitality people remember.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#contact">Get in touch</a>
-          <a class="btn btn-ghost" href="assets/Ilias_Derbouz_CV.pdf" download>Download CV</a>
+  <div class="hero-pin">
+    <section class="hero">
+      <svg class="hero-bg" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="skyGlowC" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0e2340" stop-opacity="0"/>
+            <stop offset="65%" stop-color="#c9a227" stop-opacity="0.16"/>
+            <stop offset="100%" stop-color="#d9b94f" stop-opacity="0.28"/>
+          </linearGradient>
+        </defs>
+        <rect width="1440" height="600" fill="url(#skyGlowC)"/>
+        <polygon points="0,600 0,440 160,320 260,400 380,260 520,420 640,340 780,460 900,300 1040,430 1180,350 1320,440 1440,380 1440,600" fill="#14335c"/>
+        <polygon points="140,340 260,400 205,415" fill="#3a5d8a"/>
+        <polygon points="380,260 520,420 450,430" fill="#3a5d8a"/>
+        <polygon points="900,300 1040,430 960,440" fill="#3a5d8a"/>
+        <polygon points="0,600 0,500 150,420 300,480 460,400 620,470 800,410 980,480 1150,420 1300,470 1440,440 1440,600" fill="#0a1a30"/>
+      </svg>
+      <div class="wrap hero-inner">
+        <div class="hero-text">
+          <p class="eyebrow">Hospitality Management Alumni</p>
+          <h1>Ilias Derbouz</h1>
+          <p class="hero-lede">Hospitality is where I come alive — every guest, every shift, every new culture teaches me something. I've traded borders for front desks across Switzerland, Iceland, Italy and Sweden, and I'm just getting started: building toward a career leading teams and creating the kind of hospitality people remember.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contact">Get in touch</a>
+            <a class="btn btn-ghost" href="assets/Ilias_Derbouz_CV.pdf" download>Download CV</a>
+          </div>
+          <ul class="hero-contact">
+            <li><a href="mailto:ilias.derbouz@shms-mail.ch">ilias.derbouz@shms-mail.ch</a></li>
+            <li>Leysin, Switzerland</li>
+          </ul>
         </div>
-        <ul class="hero-contact">
-          <li><a href="mailto:ilias.derbouz@shms-mail.ch">ilias.derbouz@shms-mail.ch</a></li>
-          <li>Leysin, Switzerland</li>
-        </ul>
+        <div class="hero-photo">
+          <img src="assets/headshot.jpg" alt="Portrait of Ilias Derbouz" width="320" height="320">
+        </div>
       </div>
-      <div class="hero-photo">
-        <img src="assets/headshot.jpg" alt="Portrait of Ilias Derbouz" width="320" height="320">
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <section class="section" id="about">
     <div class="wrap reveal">

@@ -7,14 +7,15 @@
   --gold-400: #d9b94f;
   --ink: #1c2430;
   --ink-soft: #4a5568;
-  --paper: #ffffff;
-  --paper-alt: #f5f6f8;
-  --line: #e2e5ea;
+  --paper: #eef3fa;
+  --paper-alt: #e0e9f5;
+  --line: #d3e0ee;
   --radius: 10px;
   --shadow: 0 8px 24px rgba(14, 35, 64, 0.08);
   --font-display: "Playfair Display", Georgia, serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   --max-width: 1100px;
+  --header-height: 72px;
 }
 
 /* ---------- Reset ---------- */
@@ -55,7 +56,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(238, 243, 250, 0.92);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
 }
@@ -63,7 +64,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
+  height: var(--header-height);
 }
 .brand {
   font-family: var(--font-display);
@@ -111,12 +112,24 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   display: block;
 }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero ----------
+   .hero-pin is a tall scroll track; .hero sticks to the top of the
+   viewport (just under the header) for the length of that track, which
+   is what lets the landscape/photo/name reveal play out gradually over
+   several seconds of scrolling instead of resolving instantly. See
+   js/main.js for the progress calculation. */
+.hero-pin {
+  position: relative;
+  height: 240vh;
+}
 .hero {
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  display: flex;
+  align-items: center;
   background: linear-gradient(160deg, var(--navy-950), var(--navy-800));
   color: #fff;
-  padding: 88px 0;
-  position: relative;
   overflow: hidden;
 }
 .hero-bg {
@@ -130,9 +143,13 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1.4fr 0.8fr;
+  grid-template-columns: 1fr 0.8fr;
   gap: 48px;
   align-items: center;
+  width: 100%;
+}
+.hero-text {
+  max-width: 400px;
 }
 .eyebrow {
   text-transform: uppercase;
@@ -143,14 +160,13 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   margin: 0 0 12px;
 }
 .hero h1 {
-  font-size: clamp(2.4rem, 5vw, 3.6rem);
-  margin: 0 0 18px;
+  font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+  margin: 0 0 16px;
 }
 .hero-lede {
-  font-size: 1.08rem;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.82);
-  max-width: 46ch;
-  margin: 0 0 28px;
+  margin: 0 0 26px;
 }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 28px; }
 .btn {
@@ -269,14 +285,14 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 
 /* ---------- Cards ---------- */
 .card {
-  background: var(--paper);
+  background: #ffffff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 20px 22px;
   margin-bottom: 16px;
   box-shadow: var(--shadow);
 }
-.section.alt .card { background: var(--paper); }
+.section.alt .card { background: #ffffff; }
 .card h3 { font-size: 1.05rem; margin-bottom: 4px; }
 .card-org { color: var(--ink-soft); font-size: 0.92rem; margin: 0 0 4px; }
 .card-date { color: var(--gold-500); font-weight: 600; font-size: 0.85rem; margin: 0; }
@@ -287,7 +303,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 /* ---------- Skills / Languages ---------- */
 .tag-list { display: flex; flex-wrap: wrap; gap: 10px; }
 .tag-list li {
-  background: var(--paper);
+  background: #ffffff;
   border: 1px solid var(--line);
   padding: 10px 18px;
   border-radius: 999px;
@@ -299,7 +315,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--paper);
+  background: #ffffff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 12px 18px;
@@ -336,24 +352,24 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 .footer-inner a:hover { color: var(--navy-900); }
 
-/* ---------- Motion: hero entrance (text only — bg/photo are scroll-driven, see js/main.js) ---------- */
-.hero-bg,
-.hero-photo img {
+/* ---------- Motion: hero (fully scroll-driven, see js/main.js) ----------
+   The landscape is what greets you at rest. The name/photo start hidden
+   and rise in as the hero's pinned scroll track advances; the landscape
+   keeps growing the whole time, reaching its largest ("full view") just
+   as the hero lets go and About scrolls in. */
+.hero-bg {
   transform-origin: 50% 30%;
   will-change: transform;
 }
-.hero-text > * {
-  animation: heroFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+.hero-photo img {
+  transform-origin: center;
+  will-change: transform;
 }
-.hero-text .eyebrow { animation-delay: 0.05s; }
-.hero-text h1 { animation-delay: 0.15s; }
-.hero-text .hero-lede { animation-delay: 0.25s; }
-.hero-text .hero-actions { animation-delay: 0.35s; }
-.hero-text .hero-contact { animation-delay: 0.45s; }
-
-@keyframes heroFadeUp {
-  from { transform: translateY(18px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+.hero-text,
+.hero-photo {
+  opacity: 0;
+  transform: translateY(26px) scale(0.94);
+  will-change: transform, opacity;
 }
 
 /* ---------- Motion: continuous scroll-linked zoom ----------
@@ -369,16 +385,33 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-bg, .hero-photo img, .hero-text > * {
+  .hero-bg, .hero-photo img, .hero-text, .hero-photo {
     animation: none !important; opacity: 1 !important; transform: none !important;
   }
   .reveal {
     opacity: 1 !important; transform: none !important;
   }
+  .hero-pin { height: auto !important; }
+  .hero { position: relative !important; top: 0 !important; height: auto !important; padding: 88px 0; }
 }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
+  /* The pinned, scroll-scrubbed hero needs real vertical room to work —
+     on narrow/short viewports it falls back to a normal, fully-visible
+     hero so nothing gets stuck hidden or clipped. */
+  .hero-pin { height: auto; }
+  .hero {
+    position: relative;
+    top: 0;
+    height: auto;
+    padding: 64px 0 56px;
+  }
+  .hero-text, .hero-photo {
+    opacity: 1;
+    transform: none;
+  }
+  .hero-text { max-width: none; }
   .hero-inner { grid-template-columns: 1fr; }
   .hero-photo { max-width: 220px; order: -1; }
   .two-col { grid-template-columns: 1fr; gap: 40px; }
