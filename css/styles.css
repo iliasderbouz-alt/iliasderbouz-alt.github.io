@@ -5,6 +5,7 @@
   --navy-800: #14335c;
   --gold-500: #c9a227;
   --gold-400: #d9b94f;
+  --gold-700: #7a5c14; /* darker gold for small text on light backgrounds — meets WCAG AA contrast */
   --ink: #1c2430;
   --ink-soft: #4a5568;
   --paper: #eef3fa;
@@ -224,9 +225,90 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   letter-spacing: 0.14em;
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--gold-500);
+  color: var(--gold-700);
 }
 .about-text { font-size: 1.1rem; max-width: 68ch; color: var(--ink-soft); }
+
+/* ---------- Campus carousel ---------- */
+.gallery-intro { font-size: 1.05rem; max-width: 60ch; color: var(--ink-soft); margin: -20px 0 32px; }
+
+.carousel {
+  position: relative;
+}
+.carousel-viewport {
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  will-change: transform;
+}
+.carousel-slide {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 8 / 5;
+  color: #fff;
+}
+.carousel-slide svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.carousel-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 18px 22px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: linear-gradient(0deg, rgba(10, 26, 48, 0.75), rgba(10, 26, 48, 0));
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  background: rgba(10, 26, 48, 0.35);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.carousel-arrow:hover,
+.carousel-arrow:focus-visible {
+  background: rgba(10, 26, 48, 0.6);
+  border-color: #fff;
+}
+.carousel-arrow-prev { left: 16px; }
+.carousel-arrow-next { right: 16px; }
+.carousel-arrow[disabled] { opacity: 0.35; cursor: default; }
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+.carousel-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: var(--line);
+  cursor: pointer;
+}
+.carousel-dot.active { background: var(--gold-500); }
 
 .two-col {
   display: grid;
@@ -295,7 +377,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .section.alt .card { background: #ffffff; }
 .card h3 { font-size: 1.05rem; margin-bottom: 4px; }
 .card-org { color: var(--ink-soft); font-size: 0.92rem; margin: 0 0 4px; }
-.card-date { color: var(--gold-500); font-weight: 600; font-size: 0.85rem; margin: 0; }
+.card-date { color: var(--gold-700); font-weight: 600; font-size: 0.85rem; margin: 0; }
 
 .ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
 .ref-note { color: var(--ink-soft); font-size: 0.9rem; }
@@ -428,6 +510,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   .hero-pin { height: auto !important; }
   .hero { position: relative !important; top: 0 !important; height: auto !important; padding: 88px 0; }
   .hero-scroll-cue { display: none; }
+  .carousel-track { transition: none !important; }
 }
 
 /* ---------- Responsive ---------- */
@@ -462,6 +545,11 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 
   .two-col { grid-template-columns: 1fr; gap: 40px; }
   .ref-grid { grid-template-columns: 1fr; }
+
+  .carousel-arrow { width: 38px; height: 38px; }
+  .carousel-arrow-prev { left: 10px; }
+  .carousel-arrow-next { right: 10px; }
+  .carousel-caption { font-size: 0.85rem; padding: 14px 16px; }
 }
 
 @media (max-width: 400px) {

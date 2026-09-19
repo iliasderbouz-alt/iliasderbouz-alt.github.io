@@ -24,6 +24,63 @@
     });
   }
 
+  // ---------- Campus photo carousel ----------
+  // Slides sit side by side in a flex track; "next" shifts the track left
+  // so the next slide enters from the right (and vice versa for "prev").
+  var carousel = document.querySelector("[data-carousel]");
+  if (carousel) {
+    var track = carousel.querySelector("[data-track]");
+    var slides = Array.prototype.slice.call(track.children);
+    var prevBtn = carousel.querySelector("[data-prev]");
+    var nextBtn = carousel.querySelector("[data-next]");
+    var dotsWrap = carousel.querySelector("[data-dots]");
+    var index = 0;
+
+    slides.forEach(function (_, i) {
+      var dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "carousel-dot";
+      dot.setAttribute("role", "tab");
+      dot.setAttribute("aria-label", "Go to photo " + (i + 1) + " of " + slides.length);
+      dot.addEventListener("click", function () { goTo(i); });
+      dotsWrap.appendChild(dot);
+    });
+    var dots = Array.prototype.slice.call(dotsWrap.children);
+
+    function render() {
+      track.style.transform = "translateX(-" + (index * 100) + "%)";
+      dots.forEach(function (dot, i) { dot.classList.toggle("active", i === index); });
+    }
+
+    function goTo(i) {
+      index = (i + slides.length) % slides.length;
+      render();
+    }
+
+    if (prevBtn) prevBtn.addEventListener("click", function () { goTo(index - 1); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { goTo(index + 1); });
+
+    carousel.setAttribute("tabindex", "0");
+    carousel.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { goTo(index - 1); }
+      else if (e.key === "ArrowRight") { goTo(index + 1); }
+    });
+
+    // Touch/swipe support
+    var touchStartX = null;
+    track.addEventListener("touchstart", function (e) {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    track.addEventListener("touchend", function (e) {
+      if (touchStartX === null) return;
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) { goTo(dx < 0 ? index + 1 : index - 1); }
+      touchStartX = null;
+    });
+
+    render();
+  }
+
   // ---------- Continuous scroll-linked zoom ----------
   // Every frame, each animated element's progress is recomputed straight
   // from its live position in the viewport and written as inline styles.
