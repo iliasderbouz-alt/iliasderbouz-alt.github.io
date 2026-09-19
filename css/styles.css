@@ -432,26 +432,45 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
-  /* The pinned, scroll-scrubbed hero needs real vertical room to work —
-     on narrow/short viewports it falls back to a normal, fully-visible
-     hero so nothing gets stuck hidden or clipped. */
-  .hero-pin { height: auto; }
+  /* The pinned, scroll-scrubbed hero stays active on mobile — same
+     landscape-first reveal as desktop — but is recalibrated for
+     narrower/shorter viewports so the stacked hero content (photo,
+     name, lede, actions, contact row) reliably fits inside the sticky
+     box without being clipped by .hero's overflow: hidden. */
+  .hero-pin { height: 190vh; }
   .hero {
-    position: relative;
-    top: 0;
-    height: auto;
-    padding: 64px 0 56px;
+    height: calc(100vh - var(--header-height));
+    /* dvh accounts for mobile browser chrome (address bar) showing or
+       hiding as the page scrolls; vh above is the fallback for
+       browsers without dvh support. */
+    height: calc(100dvh - var(--header-height));
+    padding: 0;
   }
-  .hero-text, .hero-photo {
-    opacity: 1;
-    transform: none;
-  }
+  .hero-inner { grid-template-columns: 1fr; gap: 14px; }
   .hero-text { max-width: none; }
-  .hero-scroll-cue { display: none; }
-  .hero-inner { grid-template-columns: 1fr; }
-  .hero-photo { max-width: 220px; order: -1; }
+  .hero-photo { max-width: 140px; margin: 0 auto; order: -1; }
+
+  .eyebrow { font-size: 0.7rem; margin: 0 0 6px; }
+  .hero h1 { font-size: clamp(1.5rem, 7vw, 1.9rem); margin: 0 0 8px; }
+  .hero-lede { font-size: 0.85rem; line-height: 1.45; margin: 0 0 14px; }
+  .hero-actions { gap: 10px; margin-bottom: 14px; }
+  .hero-actions .btn { padding: 10px 18px; font-size: 0.85rem; }
+  .hero-contact { gap: 8px 16px; font-size: 0.8rem; }
+
+  .hero-scroll-cue { bottom: 14px; }
+  .hero-scroll-cue-ring { width: 38px; height: 38px; }
+
   .two-col { grid-template-columns: 1fr; gap: 40px; }
   .ref-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 400px) {
+  /* Extra headroom for the smallest phones (e.g. iPhone SE-class
+     widths/heights): shrink a little further. */
+  .hero-photo { max-width: 130px; }
+  .hero h1 { font-size: clamp(1.4rem, 8vw, 1.7rem); }
+  .hero-lede { font-size: 0.8rem; margin-bottom: 12px; }
+  .hero-actions .btn { padding: 9px 16px; font-size: 0.82rem; }
 }
 
 @media (max-width: 720px) {
@@ -462,11 +481,50 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
     flex-direction: column;
     align-items: flex-start;
     padding: 24px;
-    gap: 20px;
+    gap: 14px;
     transform: translateX(100%);
     transition: transform 0.25s ease;
   }
   .primary-nav.open { transform: translateX(0); }
+
+  /* "Bubble" pill links: same filled-pill language as .nav-cta, so the
+     slide-in panel reads as a set of clearly tappable chips instead of
+     plain stacked text. */
+  .primary-nav a:not(.nav-cta) {
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: rgba(14, 35, 64, 0.08);
+    border: 1px solid var(--line);
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .primary-nav a:not(.nav-cta):hover,
+  .primary-nav a:not(.nav-cta):focus-visible {
+    background: rgba(14, 35, 64, 0.16);
+    border-color: rgba(14, 35, 64, 0.3);
+    color: var(--navy-900);
+  }
+  .primary-nav a:not(.nav-cta).active {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: #fff;
+  }
+
   .nav-toggle { display: flex; }
   .nav-cta { align-self: flex-start; }
+
+  /* Circular "bubble" behind the hamburger so it reads as a clear
+     tappable button rather than three bare bars. */
+  .nav-toggle {
+    border-radius: 50%;
+    background: rgba(14, 35, 64, 0.06);
+    transition: background 0.15s ease;
+  }
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible,
+  .nav-toggle[aria-expanded="true"] {
+    background: rgba(14, 35, 64, 0.14);
+  }
 }
