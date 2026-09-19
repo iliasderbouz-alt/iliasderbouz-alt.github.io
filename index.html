@@ -16,6 +16,7 @@
   .hero { position: relative !important; top: 0 !important; height: auto !important; padding: 88px 0 !important; }
   .hero-text, .hero-photo { opacity: 1 !important; transform: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; }
+  .hero-scroll-cue { display: none !important; }
 </style>
 </noscript>
 </head>
@@ -77,6 +78,13 @@
           <img src="assets/headshot.jpg" alt="Portrait of Ilias Derbouz" width="320" height="320">
         </div>
       </div>
+      <a class="hero-scroll-cue" href="#about" aria-label="Skip the intro and jump to the page content">
+        <span class="hero-scroll-cue-ring">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </span>
+      </a>
     </section>
   </div>
 

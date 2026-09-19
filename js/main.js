@@ -37,6 +37,7 @@
   var heroText = document.querySelector(".hero-text");
   var heroPhotoWrap = document.querySelector(".hero-photo");
   var heroPhotoImg = document.querySelector(".hero-photo img");
+  var heroCue = document.querySelector(".hero-scroll-cue");
   var siteHeader = document.querySelector(".site-header");
   var revealEls = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
 
@@ -84,6 +85,15 @@
         }
         if (heroPhotoImg) {
           heroPhotoImg.style.transform = "scale(" + (1 + heroProgress * 0.12) + ")";
+        }
+
+        // Skip-intro arrow: only useful while the reveal hasn't happened
+        // yet, so it fades out quickly as soon as scrolling (or a click)
+        // starts making progress, and stops intercepting clicks once gone.
+        if (heroCue) {
+          var cueOpacity = clamp(1 - heroProgress / 0.18, 0, 1);
+          heroCue.style.opacity = String(cueOpacity);
+          heroCue.style.pointerEvents = cueOpacity < 0.05 ? "none" : "auto";
         }
       }
 

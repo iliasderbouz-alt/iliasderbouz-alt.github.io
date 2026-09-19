@@ -372,6 +372,40 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   will-change: transform, opacity;
 }
 
+/* Skip-intro arrow: sits over the landscape-only opening state, fades out
+   once the name/photo have risen in (see js/main.js), and jumps straight
+   to the page content for anyone who doesn't want to scroll through the
+   reveal. */
+.hero-scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  z-index: 2;
+  color: #fff;
+  will-change: opacity;
+}
+.hero-scroll-cue-ring {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+  animation: heroCueBounce 2.2s ease-in-out infinite;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.hero-scroll-cue:hover .hero-scroll-cue-ring {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.16);
+}
+@keyframes heroCueBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
 /* ---------- Motion: continuous scroll-linked zoom ----------
    Progress is computed every animation frame from each element's live
    position (js/main.js) and written as inline opacity/transform, so the
@@ -393,6 +427,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   }
   .hero-pin { height: auto !important; }
   .hero { position: relative !important; top: 0 !important; height: auto !important; padding: 88px 0; }
+  .hero-scroll-cue { display: none; }
 }
 
 /* ---------- Responsive ---------- */
@@ -412,6 +447,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
     transform: none;
   }
   .hero-text { max-width: none; }
+  .hero-scroll-cue { display: none; }
   .hero-inner { grid-template-columns: 1fr; }
   .hero-photo { max-width: 220px; order: -1; }
   .two-col { grid-template-columns: 1fr; gap: 40px; }
