@@ -24,6 +24,29 @@
     });
   }
 
+  // Scroll-triggered zoom reveal for each section (skipped entirely for
+  // prefers-reduced-motion — CSS already shows everything at full opacity there)
+  var prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var revealEls = document.querySelectorAll(".reveal");
+
+  if (revealEls.length && !prefersReducedMotion && "IntersectionObserver" in window) {
+    var revealObserver = new IntersectionObserver(
+      function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.18, rootMargin: "0px 0px -8% 0px" }
+    );
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  } else {
+    // No IntersectionObserver support, or motion is reduced: show everything immediately
+    revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+  }
+
   // Highlight the current section in the nav while scrolling
   var sections = document.querySelectorAll("main section[id]");
   var navLinks = document.querySelectorAll(".primary-nav a[href^='#']");
