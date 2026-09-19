@@ -130,7 +130,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1.1fr 1.05fr;
+  grid-template-columns: 1.4fr 0.8fr;
   gap: 48px;
   align-items: center;
 }
@@ -176,12 +176,20 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 .hero-contact a:hover { color: var(--gold-400); }
 
-.hero-photo img {
+.hero-photo {
+  max-width: 320px;
+  width: 100%;
+  margin: 0 auto;
   border-radius: var(--radius);
+  overflow: hidden;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-  aspect-ratio: 820 / 800;
+}
+.hero-photo img {
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* ---------- Sections ---------- */
@@ -328,11 +336,11 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 .footer-inner a:hover { color: var(--navy-900); }
 
-/* ---------- Motion: hero entrance ---------- */
-.hero-photo img,
-.hero-bg {
-  animation: heroZoomOut 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-  transform-origin: center;
+/* ---------- Motion: hero entrance (text only — bg/photo are scroll-driven, see js/main.js) ---------- */
+.hero-bg,
+.hero-photo img {
+  transform-origin: 50% 30%;
+  will-change: transform;
 }
 .hero-text > * {
   animation: heroFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -343,38 +351,36 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .hero-text .hero-actions { animation-delay: 0.35s; }
 .hero-text .hero-contact { animation-delay: 0.45s; }
 
-@keyframes heroZoomOut {
-  from { transform: scale(1.12); opacity: 0; }
-  to   { transform: scale(1);    opacity: 1; }
-}
 @keyframes heroFadeUp {
   from { transform: translateY(18px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
 }
 
-/* ---------- Motion: scroll reveal (zoom in/out per section) ---------- */
+/* ---------- Motion: continuous scroll-linked zoom ----------
+   Progress is computed every animation frame from each element's live
+   position (js/main.js) and written as inline opacity/transform, so the
+   zoom tracks the scrollbar directly instead of firing once. No CSS
+   transition here on purpose — the scroll position itself supplies the
+   easing. */
 .reveal {
   opacity: 0;
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: scale(0.86);
   will-change: transform, opacity;
 }
-.reveal-zoom-in  { transform: scale(0.92); }
-.reveal-zoom-out { transform: scale(1.08); }
-.reveal.is-visible { opacity: 1; transform: scale(1); }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-photo img, .hero-bg, .hero-text > * {
+  .hero-bg, .hero-photo img, .hero-text > * {
     animation: none !important; opacity: 1 !important; transform: none !important;
   }
   .reveal {
-    transition: none !important; opacity: 1 !important; transform: none !important;
+    opacity: 1 !important; transform: none !important;
   }
 }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
   .hero-inner { grid-template-columns: 1fr; }
-  .hero-photo { max-width: 280px; margin: 0 auto; order: -1; }
+  .hero-photo { max-width: 220px; order: -1; }
   .two-col { grid-template-columns: 1fr; gap: 40px; }
   .ref-grid { grid-template-columns: 1fr; }
 }

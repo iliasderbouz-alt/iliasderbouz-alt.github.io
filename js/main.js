@@ -24,27 +24,72 @@
     });
   }
 
-  // Scroll-triggered zoom reveal for each section (skipped entirely for
-  // prefers-reduced-motion — CSS already shows everything at full opacity there)
+  // ---------- Continuous scroll-linked zoom ----------
+  // Every frame, each animated element's progress is recomputed straight
+  // from its live position in the viewport and written as inline styles.
+  // That's what makes this track the scrollbar directly (zoom in as you
+  // scroll down, zoom back out if you scroll back up) instead of firing
+  // once like a classic "reveal on scroll" effect.
   var prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var revealEls = document.querySelectorAll(".reveal");
+  var heroSection = document.querySelector(".hero");
+  var heroBg = document.querySelector(".hero-bg");
+  var heroPhoto = document.querySelector(".hero-photo img");
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
 
-  if (revealEls.length && !prefersReducedMotion && "IntersectionObserver" in window) {
-    var revealObserver = new IntersectionObserver(
-      function (entries, obs) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.18, rootMargin: "0px 0px -8% 0px" }
-    );
-    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  if (!prefersReducedMotion && "requestAnimationFrame" in window && (heroSection || revealEls.length)) {
+    var ticking = false;
+
+    var update = function () {
+      ticking = false;
+      var vh = window.innerHeight;
+
+      // Hero: the landscape (and photo) zoom in continuously as the
+      // page scrolls from the top down through the hero, "arriving"
+      // fully zoomed in right around the point the About section
+      // reaches the top of the viewport.
+      if (heroSection) {
+        var heroRect = heroSection.getBoundingClientRect();
+        var heroProgress = clamp(-heroRect.top / heroRect.height, 0, 1);
+        if (heroBg) {
+          heroBg.style.transform = "scale(" + (1 + heroProgress * 0.55) + ")";
+        }
+        if (heroPhoto) {
+          heroPhoto.style.transform = "scale(" + (1 + heroProgress * 0.18) + ")";
+        }
+      }
+
+      // Every other section: zooms in from a small, soft state up to
+      // full size as it's scrolled into view.
+      revealEls.forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        var start = vh * 0.92; // rect.top when the section starts animating in
+        var end = vh * 0.4;    // rect.top when it reaches full size
+        var progress = clamp((start - rect.top) / (start - end), 0, 1);
+        el.style.opacity = String(progress);
+        el.style.transform = "scale(" + (0.86 + progress * 0.14) + ")";
+      });
+    };
+
+    var onScroll = function () {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(update);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
   } else {
-    // No IntersectionObserver support, or motion is reduced: show everything immediately
-    revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+    // Reduced motion, or no rAF support: show everything at rest, no motion.
+    revealEls.forEach(function (el) {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    });
   }
 
   // Highlight the current section in the nav while scrolling
