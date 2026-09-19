@@ -251,6 +251,13 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   aspect-ratio: 8 / 5;
   color: #fff;
 }
+.carousel-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
 .carousel-slide svg {
   display: block;
   width: 100%;
