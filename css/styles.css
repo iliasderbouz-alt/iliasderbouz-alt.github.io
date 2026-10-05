@@ -510,6 +510,88 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   50% { transform: translateY(6px); }
 }
 
+/* ---------- Motion: hero ambient effects ----------
+   A thin layer of texture on top of the landscape — not part of the
+   scroll-driven reveal above, and never competes with it: lines/dots
+   draw in once on load, the glow and ripple only react to a visitor
+   who is actually hovering/tapping the hero itself. */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-grid-line {
+  stroke: var(--gold-400);
+  stroke-width: 0.6;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: heroGridDraw 1.8s ease-out forwards;
+}
+@keyframes heroGridDraw {
+  0% { stroke-dashoffset: 100; opacity: 0; }
+  55% { opacity: 0.22; }
+  100% { stroke-dashoffset: 0; opacity: 0.14; }
+}
+.hero-grid-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold-400);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  z-index: 0;
+  animation: heroDotPulse 3.2s ease-in-out infinite;
+}
+@keyframes heroDotPulse {
+  0%, 100% { opacity: 0.12; }
+  50% { opacity: 0.4; }
+}
+.hero-mouse-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 185, 79, 0.16), rgba(201, 162, 39, 0.06) 45%, transparent 72%);
+  filter: blur(6px);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  will-change: transform, opacity;
+  z-index: 0;
+}
+.hero-ripple-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+.hero-ripple {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(217, 185, 79, 0.55);
+  box-shadow: 0 0 0 1px rgba(217, 185, 79, 0.3);
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0.6;
+  animation: heroRipple 0.9s ease-out forwards;
+}
+@keyframes heroRipple {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(16); opacity: 0; }
+}
+
 /* ---------- Motion: continuous scroll-linked zoom ----------
    Progress is computed every animation frame from each element's live
    position (js/main.js) and written as inline opacity/transform, so the
@@ -533,6 +615,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
   .hero { position: relative !important; top: 0 !important; height: auto !important; padding: 88px 0; }
   .hero-scroll-cue { display: none; }
   .carousel-track { transition: none !important; }
+  .hero-grid-line, .hero-grid-dot { animation: none !important; opacity: 0.1 !important; stroke-dashoffset: 0 !important; }
+  .hero-mouse-glow, .hero-ripple-layer { display: none !important; }
 }
 
 /* ---------- Responsive ---------- */

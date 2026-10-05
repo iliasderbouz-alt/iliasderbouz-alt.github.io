@@ -206,4 +206,43 @@
     );
     sections.forEach(function (section) { observer.observe(section); });
   }
+
+  // ---------- Hero ambient effects ----------
+  // Grid lines/dots draw themselves in once on load (pure CSS animation,
+  // nothing to do here). The glow follows the pointer and the ripple
+  // answers a click, but only while someone is actually over the hero —
+  // this never touches the scroll-driven reveal above it.
+  var heroSection = document.querySelector(".hero");
+  var heroGlow = document.querySelector(".hero-mouse-glow");
+  var heroRippleLayer = document.querySelector(".hero-ripple-layer");
+  var hasFinePointer = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
+
+  if (heroSection && !prefersReducedMotion) {
+    if (heroGlow && hasFinePointer) {
+      heroSection.addEventListener("mousemove", function (e) {
+        var rect = heroSection.getBoundingClientRect();
+        heroGlow.style.left = (e.clientX - rect.left) + "px";
+        heroGlow.style.top = (e.clientY - rect.top) + "px";
+        heroGlow.style.opacity = "1";
+      });
+      heroSection.addEventListener("mouseleave", function () {
+        heroGlow.style.opacity = "0";
+      });
+    }
+
+    if (heroRippleLayer) {
+      heroSection.addEventListener("click", function (e) {
+        // Skip real links/buttons so the ripple reads as ambient texture,
+        // not a click-confirmation stacked on every actual interaction.
+        if (e.target.closest("a, button")) return;
+        var rect = heroSection.getBoundingClientRect();
+        var ripple = document.createElement("span");
+        ripple.className = "hero-ripple";
+        ripple.style.left = (e.clientX - rect.left) + "px";
+        ripple.style.top = (e.clientY - rect.top) + "px";
+        heroRippleLayer.appendChild(ripple);
+        setTimeout(function () { ripple.remove(); }, 900);
+      });
+    }
+  }
 })();
