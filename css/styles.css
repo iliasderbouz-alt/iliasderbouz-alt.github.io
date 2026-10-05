@@ -685,27 +685,29 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 
   /* "Bubble" pill links: same filled-pill language as .nav-cta, so the
      slide-in panel reads as a set of clearly tappable chips instead of
-     plain stacked text. */
+     plain stacked text. Solid fill + bright white label (not a faint
+     tint) so each chip reads clearly at a glance, not just as a shape. */
   .primary-nav a:not(.nav-cta) {
     width: 100%;
     padding: 12px 18px;
     border-radius: 999px;
-    background: rgba(14, 35, 64, 0.08);
-    border: 1px solid var(--line);
+    background: var(--navy-900);
+    border: 1px solid var(--navy-900);
+    color: #fff;
     font-size: 1rem;
     font-weight: 600;
     transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
   .primary-nav a:not(.nav-cta):hover,
   .primary-nav a:not(.nav-cta):focus-visible {
-    background: rgba(14, 35, 64, 0.16);
-    border-color: rgba(14, 35, 64, 0.3);
-    color: var(--navy-900);
+    background: var(--navy-800);
+    border-color: var(--navy-800);
+    color: #fff;
   }
   .primary-nav a:not(.nav-cta).active {
-    background: var(--navy-900);
-    border-color: var(--navy-900);
-    color: #fff;
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: var(--navy-950);
   }
 
   .nav-toggle { display: flex; }
